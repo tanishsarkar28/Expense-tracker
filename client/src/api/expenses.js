@@ -1,8 +1,17 @@
 import axios from "axios";
 
 // In development: Vite proxies /api → localhost:3001 (no CORS needed)
-// In production:  VITE_API_URL is set to the Railway backend URL
+// In production:  VITE_API_URL must be set to your Railway backend URL
+const isProd = import.meta.env.PROD;
 const baseURL = import.meta.env.VITE_API_URL || "/api";
+
+if (isProd && !import.meta.env.VITE_API_URL) {
+  console.error(
+    "⚠️  VITE_API_URL is not set! " +
+    "Add it in Vercel → Project Settings → Environment Variables. " +
+    "Value should be: https://your-backend.up.railway.app/api"
+  );
+}
 
 const api = axios.create({
   baseURL,
