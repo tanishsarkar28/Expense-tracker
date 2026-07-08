@@ -58,7 +58,17 @@ export default function ExpenseForm({ onSubmit, onClose, editData }) {
       setForm(defaultForm);
       onClose();
     } catch (err) {
-      setErrors({ global: err?.response?.data?.messages?.join(" ") || "Something went wrong." });
+      console.error("Submit error:", err?.response?.status, err?.response?.data, err?.message);
+      const serverMsg =
+        err?.response?.data?.messages?.join(" ") ||
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        null;
+      const status = err?.response?.status;
+      const fallback = status
+        ? `Error ${status}: ${serverMsg || err.message}`
+        : `Network error — ${err.message}. Is the backend running?`;
+      setErrors({ global: serverMsg || fallback });
     } finally {
       setLoading(false);
     }
