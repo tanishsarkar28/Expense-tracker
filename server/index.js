@@ -46,7 +46,13 @@ app.use((req, res) => {
 // ─── Global Error Handler ─────────────────────────────────────────────────────
 app.use(errorHandler);
 
-// ─── Start Server ─────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`✅  Server running at http://localhost:${PORT}`);
-});
+// ─── Start Server (local dev only) ───────────────────────────────────────────
+// When run directly (`node index.js`), start an HTTP server.
+// When imported by Vercel serverless, just export the app.
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`✅  Server running at http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
